@@ -2,6 +2,7 @@
 import { KeyRedeemType } from "@/types/key-types";
 import Identicon from "react-blockies";
 
+// Replaced the previous us of Identicon for now
 const IdenticonComponent = Identicon as any;
 
 export const KeyItem = ({ item }: { item: KeyRedeemType }) => {
