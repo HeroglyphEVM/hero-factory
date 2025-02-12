@@ -1,0 +1,12 @@
+import { PinataSDK } from "pinata"
+import { PINATA_JWT } from '../web3/constants';
+
+// API Key: e63afffca21818d5d672
+// API Secret: ad1a8427b56a8df63642c2aa6aab4302bf7e095be507489699d8090144792403
+// JWT: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxYWRhMWU0MS1mMThkLTRjODMtOTM2NC00MzBjNTRmZWM5YTYiLCJlbWFpbCI6ImRldmRldm92MDFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImU2M2FmZmZjYTIxODE4ZDVkNjcyIiwic2NvcGVkS2V5U2VjcmV0IjoiYWQxYTg0MjdiNTZhOGRmNjM2NDJjMmFhNmFhYjQzMDJiZjdlMDk1YmU1MDc0ODk2OTlkODA5MDE0NDc5MjQwMyIsImV4cCI6MTc1NzA5MjE2NH0.mVWb532E_srpe8UX-kNB-B7ifongkFz24wi-M3YRtec
+const PINATA_GATEWAY = 'green-perfect-salamander-504.mypinata.cloud';
+
+export const pinata = new PinataSDK({
+  pinataJwt: PINATA_JWT,
+  pinataGateway: PINATA_GATEWAY
+})
