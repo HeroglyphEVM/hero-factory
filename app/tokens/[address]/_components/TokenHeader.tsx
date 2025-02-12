@@ -1,20 +1,27 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { TokenData, TokenDescriptor } from "@/types/token-types";
 import { ArrowLeft, Globe, MessageCircle, Settings2 } from "lucide-react";
 import Link from "next/link";
-import Identicon from "react-blockies";
-import { XOutlinedIcon } from "@/components/icons/XOutlinedIcon"
-import React from "react"
+// import Identicon from "react-blockies";
+import { XOutlinedIcon } from "@/components/icons/XOutlinedIcon";
+import React from "react";
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
 import { TokenImage } from "@/components/token/TokenImage";
 
 type TokenHeaderProps = {
   tokenData: TokenData;
   tokenDescriptor: TokenDescriptor;
-}
+};
 
-export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) => {
+export const TokenHeader = ({
+  tokenData,
+  tokenDescriptor,
+}: TokenHeaderProps) => {
   return (
     <header className="mb-8 flex items-center justify-between">
       <div className="flex-grow">
@@ -57,7 +64,11 @@ export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) =>
       <div className="flex items-center space-x-1">
         {tokenDescriptor.website && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={tokenDescriptor.website} target="_blank" rel="noopener noreferrer">
+            <a
+              href={tokenDescriptor.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Globe className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Visit website</span>
             </a>
@@ -65,7 +76,11 @@ export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) =>
         )}
         {tokenDescriptor.x && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={tokenDescriptor.x} target="_blank" rel="noopener noreferrer">
+            <a
+              href={tokenDescriptor.x}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <XOutlinedIcon className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">X</span>
             </a>
@@ -73,7 +88,11 @@ export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) =>
         )}
         {tokenDescriptor.chat && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={tokenDescriptor.chat} target="_blank" rel="noopener noreferrer">
+            <a
+              href={tokenDescriptor.chat}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <MessageCircle className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Chat</span>
             </a>
@@ -81,7 +100,11 @@ export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) =>
         )}
         {tokenDescriptor.telegram && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={tokenDescriptor.telegram} target="_blank" rel="noopener noreferrer">
+            <a
+              href={tokenDescriptor.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <TelegramIcon className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Telegram</span>
             </a>
@@ -95,5 +118,5 @@ export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) =>
         </Button>
       </div>
     </header>
-  )
-}
+  );
+};

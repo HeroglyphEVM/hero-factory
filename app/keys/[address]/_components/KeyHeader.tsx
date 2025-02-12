@@ -1,21 +1,25 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { KeyDescriptor } from "@/types/key-types";
 import { KeyData } from "@/types/key-types";
 
 import { ArrowLeft, Globe, MessageCircle, Settings2 } from "lucide-react";
 import Link from "next/link";
-import Identicon from "react-blockies";
-import { XOutlinedIcon } from "@/components/icons/XOutlinedIcon"
-import React from "react"
+// import Identicon from "react-blockies";
+import { XOutlinedIcon } from "@/components/icons/XOutlinedIcon";
+import React from "react";
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
 import { KeyImage } from "@/components/token/KeyImage";
 
 type KeyHeaderProps = {
   keyData: KeyData;
   keyDescriptor: KeyDescriptor;
-}
- 
+};
+
 export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
   return (
     <header className="mb-8 flex items-center justify-between">
@@ -31,10 +35,7 @@ export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
         <div className="mt-4">
           <div className="flex items-center space-x-4">
             <div className="flex justify-center">
-              <KeyImage
-                image={keyData.image}
-                keyAddress={keyData.address}
-              />
+              <KeyImage image={keyData.image} keyAddress={keyData.address} />
             </div>
             <div className="mt-4">
               <h1 className="text-3xl font-bold mb-2">${keyData.symbol}</h1>
@@ -59,7 +60,11 @@ export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
       <div className="flex items-center space-x-1">
         {keyDescriptor.website && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={keyDescriptor.website} target="_blank" rel="noopener noreferrer">
+            <a
+              href={keyDescriptor.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Globe className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Visit website</span>
             </a>
@@ -75,7 +80,11 @@ export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
         )}
         {keyDescriptor.chat && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={keyDescriptor.chat} target="_blank" rel="noopener noreferrer">
+            <a
+              href={keyDescriptor.chat}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <MessageCircle className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Chat</span>
             </a>
@@ -83,7 +92,11 @@ export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
         )}
         {keyDescriptor.telegram && (
           <Button variant="ghost" size="icon" asChild>
-            <a href={keyDescriptor.telegram} target="_blank" rel="noopener noreferrer">
+            <a
+              href={keyDescriptor.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <TelegramIcon className="h-6 w-6 text-muted-foreground" />
               <span className="sr-only">Telegram</span>
             </a>
@@ -97,5 +110,5 @@ export const KeyHeader = ({ keyData, keyDescriptor }: KeyHeaderProps) => {
         </Button>
       </div>
     </header>
-  )
-}
+  );
+};
