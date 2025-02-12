@@ -1,0 +1,99 @@
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { TokenData, TokenDescriptor } from "@/types/token-types";
+import { ArrowLeft, Globe, MessageCircle, Settings2 } from "lucide-react";
+import Link from "next/link";
+import Identicon from "react-blockies";
+import { XOutlinedIcon } from "@/components/icons/XOutlinedIcon"
+import React from "react"
+import { TelegramIcon } from "@/components/icons/TelegramIcon";
+import { TokenImage } from "@/components/token/TokenImage";
+
+type TokenHeaderProps = {
+  tokenData: TokenData;
+  tokenDescriptor: TokenDescriptor;
+}
+
+export const TokenHeader = ({ tokenData, tokenDescriptor }: TokenHeaderProps) => {
+  return (
+    <header className="mb-8 flex items-center justify-between">
+      <div className="flex-grow">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="#" onClick={() => window.history.back()}>
+              <ArrowLeft className="h-4 w-4 mr-2 inline-block" />
+              Back
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <div className="mt-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex justify-center">
+              <TokenImage
+                image={tokenData.image}
+                tokenAddress={tokenData.address}
+              />
+            </div>
+            <div className="mt-4">
+              <h1 className="text-3xl font-bold mb-2">${tokenData.symbol}</h1>
+              <p className="text-xl text-muted-foreground">{tokenData.name}</p>
+            </div>
+            {/* <div>
+            <h1 className="text-xl font-bold">{tokenData.name} ({tokenData.symbol})</h1>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-muted-foreground">{beautifyAddress(tokenData.contractAddress)}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => copyToClipboard(tokenData.contractAddress)}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div> */}
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center space-x-1">
+        {tokenDescriptor.website && (
+          <Button variant="ghost" size="icon" asChild>
+            <a href={tokenDescriptor.website} target="_blank" rel="noopener noreferrer">
+              <Globe className="h-6 w-6 text-muted-foreground" />
+              <span className="sr-only">Visit website</span>
+            </a>
+          </Button>
+        )}
+        {tokenDescriptor.x && (
+          <Button variant="ghost" size="icon" asChild>
+            <a href={tokenDescriptor.x} target="_blank" rel="noopener noreferrer">
+              <XOutlinedIcon className="h-6 w-6 text-muted-foreground" />
+              <span className="sr-only">X</span>
+            </a>
+          </Button>
+        )}
+        {tokenDescriptor.chat && (
+          <Button variant="ghost" size="icon" asChild>
+            <a href={tokenDescriptor.chat} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="h-6 w-6 text-muted-foreground" />
+              <span className="sr-only">Chat</span>
+            </a>
+          </Button>
+        )}
+        {tokenDescriptor.telegram && (
+          <Button variant="ghost" size="icon" asChild>
+            <a href={tokenDescriptor.telegram} target="_blank" rel="noopener noreferrer">
+              <TelegramIcon className="h-6 w-6 text-muted-foreground" />
+              <span className="sr-only">Telegram</span>
+            </a>
+          </Button>
+        )}
+        <Button variant="ghost" size="icon" asChild>
+          <Link href={`/tokens/${tokenData.address}/settings`}>
+            <Settings2 className="h-6 w-6 text-muted-foreground" />
+            <span className="sr-only">Settings</span>
+          </Link>
+        </Button>
+      </div>
+    </header>
+  )
+}
