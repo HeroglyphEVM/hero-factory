@@ -1,20 +1,30 @@
 import { useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi } from "abitype";
-import { AbiStateMutability, Address, ContractFunctionArgs, ContractFunctionName, Hex } from "viem";
-import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
+import {
+  AbiStateMutability,
+  Address,
+  ContractFunctionArgs,
+  ContractFunctionName,
+  Hex,
+} from "viem";
+import {
+  Config,
+  UseWriteContractParameters,
+  useAccount,
+  useWriteContract,
+} from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useTransactor } from "./useTransactor";
 import appConfig from "@/app.config";
 import { useToast } from "@/hooks/use-toast";
 
-
 export type WriteContractConfig = {
   contractAddress: Hex;
-  functionName: string
-  args: ContractFunctionArgs<Abi, AbiStateMutability, ContractFunctionName>
-}
+  functionName: string;
+  args: ContractFunctionArgs<Abi, AbiStateMutability, ContractFunctionName>;
+};
 
 export const useContractWrite = ({
   abi,
@@ -31,26 +41,23 @@ export const useContractWrite = ({
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
   const targetNetwork = appConfig.targetNetwork;
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const sendContractWriteAsyncTx = async(
-    variables?: any,
-    options?: any,
-  ) => {
+  const sendContractWriteAsyncTx = async (variables?: any, options?: any) => {
     if (!isConnected) {
       toast({
         description: "Please connect your wallet",
         variant: "destructive",
-      })
+      });
       return;
     }
     if (chain?.id !== targetNetwork.id) {
       toast({
         description: "You are on the wrong network",
         variant: "destructive",
-      })
+      });
       return;
     }
 
@@ -63,7 +70,8 @@ export const useContractWrite = ({
 
     try {
       setIsMining(true);
-      const { blockConfirmations, onBlockConfirmation, ...mutateOptions } = options || {};
+      const { blockConfirmations, onBlockConfirmation, ...mutateOptions } =
+        options || {};
       const makeWriteWithParams = () =>
         wagmiContractWrite.writeContractAsync(
           {
@@ -78,9 +86,12 @@ export const useContractWrite = ({
                 WriteContractVariables<Abi, string, any[], Config, number>,
                 unknown
               >
-            | undefined,
+            | undefined
         );
-      const writeTxResult = await writeTx(makeWriteWithParams, { blockConfirmations, onBlockConfirmation });
+      const writeTxResult = await writeTx(makeWriteWithParams, {
+        blockConfirmations,
+        onBlockConfirmation,
+      });
 
       return writeTxResult;
     } catch (e: any) {
@@ -90,22 +101,19 @@ export const useContractWrite = ({
     }
   };
 
-  const sendContractWriteTx = (
-    variables: any,
-    options?: any,
-  ) => {
+  const sendContractWriteTx = (variables: any, options?: any) => {
     if (!isConnected) {
       toast({
         description: "Please connect your wallet",
         variant: "destructive",
-      })
+      });
       return;
     }
     if (chain?.id !== targetNetwork.id) {
       toast({
         description: "You are on the wrong network",
         variant: "destructive",
-      })
+      });
       return;
     }
 
@@ -122,7 +130,7 @@ export const useContractWrite = ({
             WriteContractVariables<Abi, string, any[], Config, number>,
             unknown
           >
-        | undefined,
+        | undefined
     );
   };
 

@@ -30,7 +30,7 @@ export const getAlchemyHttpUrl = (chainId: number) => {
 };
 
 export function getBlockExplorerTxLink(txnHash: string) {
-  const targetChain = appConfig.targetNetwork;  
+  const targetChain = appConfig.targetNetwork;
   const blockExplorerTxURL = targetChain?.blockExplorers?.default?.url;
   if (!blockExplorerTxURL) {
     return "";
