@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import { TokenFactory } from "@/components/factory/TokenFactory"
+import { TokenFactory } from "@/components/factory/TokenFactory";
 
 export default function Home() {
-
   return (
     <div className="py-5 px-2 mt-5 pb-16 md:pb-5">
       <TokenFactory />
-        {/* <div className="space-y-8">
+      {/* <div className="space-y-8">
             <Card>
               <CardHeader>
                 <CardTitle>Coin Preview</CardTitle>
@@ -50,5 +49,5 @@ export default function Home() {
             </Card>
           </div> */}
     </div>
-  )
+  );
 }

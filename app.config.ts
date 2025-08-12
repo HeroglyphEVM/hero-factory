@@ -11,11 +11,11 @@ export type AppConfig = {
 
 const appConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.mainnet,
-  // targetNetworks: [chains.baseSepolia],
+  targetNetwork: chains.baseSepolia,
+  // targetNetwork: chains.mainnet,
 
   // The networks where your DApp can be connected to
-  chains: [chains.mainnet],
+  chains: [chains.baseSepolia, chains.mainnet],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network

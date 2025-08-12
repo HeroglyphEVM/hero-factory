@@ -1,30 +1,32 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from '@/components/ui/progress'
-import { beautifyAddress } from '@/utils/web3'
-import { useParams } from 'next/navigation'
-import { useGetKeyMetadata } from '@/hooks/keys/useGetKeyMetadata'
-import { Address } from 'viem'
-import { KeyPageSkeleton } from '../_components/KeyPageSkeleton'
-import { InvalidKey } from '../_components/InvalidKey'
-import { KeyHeader } from './_components/KeyHeader'
-import { useGetKeyDescriptor } from '@/hooks/keys/useGetKeyDescriptor'
-import { CopyButton } from "@/components/ui/copy-button"
-import { RecentMintsCard } from './_components/RecentMintsCard'
-import { RecentKeyTransfersCard } from './_components/RecentKeyTransfersCard'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { beautifyAddress } from "@/utils/web3";
+import { useParams } from "next/navigation";
+import { useGetKeyMetadata } from "@/hooks/keys/useGetKeyMetadata";
+import { Address } from "viem";
+import { KeyPageSkeleton } from "../_components/KeyPageSkeleton";
+import { InvalidKey } from "../_components/InvalidKey";
+import { KeyHeader } from "./_components/KeyHeader";
+import { useGetKeyDescriptor } from "@/hooks/keys/useGetKeyDescriptor";
+import { CopyButton } from "@/components/ui/copy-button";
+import { RecentMintsCard } from "./_components/RecentMintsCard";
+import { RecentKeyTransfersCard } from "./_components/RecentKeyTransfersCard";
 
 export default function KeyPage() {
   const { address } = useParams() as { address: Address };
-  const { data: keyData, isLoading, isError } = useGetKeyMetadata(address)
-  const { data: keyDescriptor } = useGetKeyDescriptor(keyData?.metadata?.descriptorHash);
+  const { data: keyData, isLoading, isError } = useGetKeyMetadata(address);
+  const { data: keyDescriptor } = useGetKeyDescriptor(
+    keyData?.metadata?.descriptorHash
+  );
 
   if (isLoading && !isError) {
-    return <KeyPageSkeleton />
+    return <KeyPageSkeleton />;
   }
 
   if (!keyData || isError) {
-    return <InvalidKey />
+    return <InvalidKey />;
   }
 
   return (
@@ -47,7 +49,7 @@ export default function KeyPage() {
                     </p>
                   </div>
                 </div>
-                <div className='flex justify-between'>
+                <div className="flex justify-between">
                   <dt>Owner</dt>
                   <div className="flex items-center gap-2">
                     <span>{beautifyAddress(keyData.owner)}</span>
@@ -79,21 +81,38 @@ export default function KeyPage() {
               <dl className="space-y-4 text-muted-foreground">
                 <div className="flex justify-between">
                   <dt>Current Supply</dt>
-                  <dd>{keyData.totalSupply} {keyData.symbol}</dd>
+                  <dd>
+                    {keyData.totalSupply} {keyData.symbol}
+                  </dd>
                 </div>
                 <div className="flex justify-between ">
                   <dt>Max Supply</dt>
-                  <dd>{keyData.maxSupply} {keyData.symbol}</dd>
+                  <dd>
+                    {keyData.maxSupply} {keyData.symbol}
+                  </dd>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-sm text-muted-foreground mt-1">
                     <p className="text-sm font-medium">Rewards:</p>
                   </div>
-                  <Progress value={(Number(keyData.totalSupply) / Number(keyData.maxSupply)) * 100} className="mt-2" />
+                  <Progress
+                    value={
+                      (Number(keyData.totalSupply) /
+                        Number(keyData.maxSupply)) *
+                      100
+                    }
+                    className="mt-2"
+                  />
                   <div className="flex justify-between text-sm text-muted-foreground mt-1">
-
-                    <span>{((Number(keyData.totalSupply) / Number(keyData.maxSupply)) * 100).toFixed(2)}%</span>
+                    <span>
+                      {(
+                        (Number(keyData.totalSupply) /
+                          Number(keyData.maxSupply)) *
+                        100
+                      ).toFixed(2)}
+                      %
+                    </span>
                   </div>
                 </div>
               </dl>
@@ -104,5 +123,5 @@ export default function KeyPage() {
         <RecentKeyTransfersCard keyData={keyData} />
       </div>
     </div>
-  )
+  );
 }
