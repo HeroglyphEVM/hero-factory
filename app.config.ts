@@ -7,9 +7,10 @@ export type AppConfig = {
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
+  hypersyncBearerToken: string;
 };
 
-const appConfig = {
+const appConfig: AppConfig = {
   // The network where your DApp lives in
   targetNetwork: chains.baseSepolia,
   // targetNetwork: chains.mainnet,
@@ -29,6 +30,8 @@ const appConfig = {
     process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ||
     "rEjtgJdffu-YuX-yux6nhRYH5NFrllnO",
 
+  hypersyncBearerToken: process.env.NEXT_PUBLIC_HYPERSYNC_BEARER_TOKEN || "",
+
   // This is ours WalletConnect's default project ID.
   // You can get your own at https://cloud.walletconnect.com
   // It's recommended to store it in an env variable:
@@ -36,6 +39,6 @@ const appConfig = {
   walletConnectProjectId:
     process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ||
     "e4c944d25e0008d53a376056bef70c8d",
-} satisfies AppConfig;
+};
 
 export default appConfig;
