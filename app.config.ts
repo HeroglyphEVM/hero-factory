@@ -30,7 +30,7 @@ const appConfig: AppConfig = {
     process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ||
     "rEjtgJdffu-YuX-yux6nhRYH5NFrllnO",
 
-  hypersyncBearerToken: process.env.NEXT_PUBLIC_HYPERSYNC_BEARER_TOKEN || "",
+  hypersyncBearerToken: process.env.NEXT_PUBLIC_HYPERSYNC_API_TOKEN || "",
 
   // This is ours WalletConnect's default project ID.
   // You can get your own at https://cloud.walletconnect.com

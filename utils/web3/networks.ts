@@ -22,13 +22,48 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.baseSepolia.id]: "base-sepolia",
 };
 
-// TODO: MODIFY BELOW - List above is for alchemy, need to change to hypersync
-
 export const getEnvioRpcUrl = (chainId: number) => {
-  return RPC_CHAIN_NAMES[chainId]
-    ? `https://${RPC_CHAIN_NAMES[chainId]}.rpc.hypersync.xyz/${appConfig.hypersyncBearerToken}`
-    : undefined;
+  const name = RPC_CHAIN_NAMES[chainId];
+  if (!name) return undefined;
+
+  const urlBase = `https://${name}.rpc.hypersync.xyz`;
+  const envioToken = appConfig.hypersyncBearerToken;
+
+  return envioToken ? `${urlBase}/${envioToken}` : urlBase;
 };
+
+// ! The code below is for Alchemy, use if we need to switch back to it.
+
+// export const RPC_CHAIN_NAMES: Record<number, string> = {
+//   [chains.mainnet.id]: "eth-mainnet",
+//   [chains.goerli.id]: "eth-goerli",
+//   [chains.sepolia.id]: "eth-sepolia",
+//   [chains.optimism.id]: "opt-mainnet",
+//   [chains.optimismGoerli.id]: "opt-goerli",
+//   [chains.optimismSepolia.id]: "opt-sepolia",
+//   [chains.arbitrum.id]: "arb-mainnet",
+//   [chains.arbitrumGoerli.id]: "arb-goerli",
+//   [chains.arbitrumSepolia.id]: "arb-sepolia",
+//   [chains.polygon.id]: "polygon-mainnet",
+//   [chains.polygonMumbai.id]: "polygon-mumbai",
+//   [chains.polygonAmoy.id]: "polygon-amoy",
+//   [chains.astar.id]: "astar-mainnet",
+//   [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
+//   [chains.polygonZkEvmTestnet.id]: "polygonzkevm-testnet",
+//   [chains.base.id]: "base-mainnet",
+//   [chains.baseGoerli.id]: "base-goerli",
+//   [chains.baseSepolia.id]: "base-sepolia",
+// };
+
+// export const getRpcHttpUrl = (chainId: number) => {
+//   console.log(
+//     `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${appConfig.alchemyApiKey}`
+//   );
+
+//   return RPC_CHAIN_NAMES[chainId]
+//     ? `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${appConfig.alchemyApiKey}`
+//     : undefined;
+// };
 
 export function getBlockExplorerTxLink(txnHash: string) {
   const targetChain = appConfig.targetNetwork;
