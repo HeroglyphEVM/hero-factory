@@ -16,8 +16,13 @@ const errorMessages: {
   [key: string]: (value: string, maxSupply?: string) => string;
 } = {
   type: (value) => (value.trim() == "hero" ? "" : "Type must be hero"),
-  coinName: (value) => (value.trim() ? "" : "Coin name is required"),
-  symbol: (value) => (value.trim() ? "" : "Symbol is required"),
+  coinName: (value) =>
+    !value.trim()
+      ? "Token name is required"
+      : value.length > 24
+      ? "Token name must be less than 25 characters"
+      : "",
+  symbol: (value) => (!value.trim() ? "Symbol is required" : ""),
   maxSupply: (value) =>
     !value || isNaN(Number(value)) || Number(value) <= 0
       ? "Max supply must be a positive number"
