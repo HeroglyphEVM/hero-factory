@@ -1,44 +1,49 @@
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Coins, Key } from "lucide-react"
-import { HeroTokenForm } from "@/components/factory/HeroTokenForm"
-import { HeroKeyForm } from "@/components/factory/HeroKeyForm"
-import { TokenPreviewDialog } from "./TokenPreviewDialog"
-import { KeyPreviewDialog } from "./KeyPreviewDialog"
-import { TokenCreatedDialog } from "./TokenCreatedDialog"
-import { KeyCreatedDialog } from "./KeyCreatedDialog"
-import { TokenFormData, KeyFormData } from "./factory-types"
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Coins, Key } from "lucide-react";
+import { HeroTokenForm } from "@/components/factory/HeroTokenForm";
+import { HeroKeyForm } from "@/components/factory/HeroKeyForm";
+import { TokenPreviewDialog } from "./TokenPreviewDialog";
+import { KeyPreviewDialog } from "./KeyPreviewDialog";
+import { TokenCreatedDialog } from "./TokenCreatedDialog";
+import { KeyCreatedDialog } from "./KeyCreatedDialog";
+import { TokenFormData, KeyFormData } from "./factory-types";
 
 export const TokenFactory = () => {
-  const [activeTab, setActiveTab] = useState("regular")
-  const [isCreated, setIsCreated] = useState(false)
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const [contractAddress, setContractAddress] = useState("")
-  const [tokenFormData, setTokenFormData] = useState<TokenFormData>()
-  const [keyFormData, setKeyFormData] = useState<KeyFormData>()
+  const [activeTab, setActiveTab] = useState("regular");
+  const [isCreated, setIsCreated] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [contractAddress, setContractAddress] = useState("");
+  const [tokenFormData, setTokenFormData] = useState<TokenFormData>();
+  const [keyFormData, setKeyFormData] = useState<KeyFormData>();
 
   const handleTokenFormSubmit = (formData: TokenFormData) => {
-    setTokenFormData(formData)
-    setIsPreviewOpen(true)
-  }
+    setTokenFormData(formData);
+    setIsPreviewOpen(true);
+  };
   const handleKeyFormSubmit = (formData: KeyFormData) => {
-    setKeyFormData(formData)
-    setIsPreviewOpen(true)
-  }
+    setKeyFormData(formData);
+    setIsPreviewOpen(true);
+  };
   const handleTokenCreated = (address: string) => {
-    setIsCreated(true)
-    setContractAddress(address)
-  }
+    setIsCreated(true);
+    setContractAddress(address);
+  };
   const handleCloseReviewDialog = () => {
     setIsPreviewOpen(false);
-  }
+  };
   const handleCloseTokenCreatedDialog = () => {
-    setIsCreated(false)
-  }
+    setIsCreated(false);
+  };
 
   return (
     <div className="p-2 w-full max-w-3xl mx-auto">
-      <Tabs defaultValue="regular" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        defaultValue="regular"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4"
+      >
         <TabsList className="grid w-full grid-cols-2 h-auto">
           <TabsTrigger
             value="regular"
@@ -70,7 +75,7 @@ export const TokenFactory = () => {
           onTokenCreated={handleTokenCreated}
         />
       )}
-      {keyFormData && keyFormData.coinName && (
+      {keyFormData && keyFormData.keyName && (
         <KeyPreviewDialog
           formData={keyFormData}
           isOpen={isPreviewOpen}
@@ -93,11 +98,11 @@ export const TokenFactory = () => {
           isOpen={isCreated}
           onClose={handleCloseTokenCreatedDialog}
           symbol={keyFormData.symbol}
-          keyName={keyFormData.coinName}
+          keyName={keyFormData.keyName}
           keyAddress={contractAddress}
           image={keyFormData.image}
         />
       )}
     </div>
-  )
-}
+  );
+};
