@@ -55,6 +55,14 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.baseSepolia.id]: "base-sepolia",
 };
 
+export enum EAppNetworks {
+  ARBITRUM = 42161,
+}
+
+export const NETWORK_TO_CHAIN: Record<EAppNetworks, chains.Chain> = {
+  [EAppNetworks.ARBITRUM]: chains.arbitrum,
+};
+
 export const getRpcHttpUrl = (chainId: number) => {
   return RPC_CHAIN_NAMES[chainId]
     ? `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${appConfig.alchemyApiKey}`

@@ -2,11 +2,12 @@ import { hardhat } from "viem/chains";
 import { Chain, createClient, http } from "viem";
 import { wagmiConnectors } from "./wagmiConnectors";
 import { createConfig } from "wagmi";
-import { getRpcHttpUrl } from "@/utils/web3/networks";
+import { getRpcHttpUrl, NETWORK_TO_CHAIN } from "@/utils/web3/networks";
 import appConfig from "@/app.config";
 
 export const wagmiConfig = createConfig({
-  chains: [appConfig.targetNetwork],
+  // chains: [appConfig.targetNetwork],
+  chains: Object.values(NETWORK_TO_CHAIN) as [Chain, ...Chain[]],
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
