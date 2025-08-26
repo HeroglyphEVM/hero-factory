@@ -32,7 +32,6 @@ export const wagmiConfig = createConfig({
   ssr: true,
   client({ chain }) {
     // Return example: https://base-sepolia.rpc.hypersync.xyz/<token>
-    // const url = getEnvioRpcUrl(chain.id);
     const url = getRpcHttpUrl(chain.id);
 
     if (!url) {
@@ -41,7 +40,6 @@ export const wagmiConfig = createConfig({
 
     return createClient({
       chain,
-      // transport: http("https://sepolia.base.org"),
       transport: http(url),
       ...(chain.id !== (hardhat as Chain).id
         ? {

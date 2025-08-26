@@ -33,7 +33,6 @@ export const useContractQuery = ({ contractAddress, functionName, args, abi, wat
   const defaultWatch = watch ?? true;
   const { data: blockNumber } = useBlockNumber({
     watch: defaultWatch,
-    // chainId: appConfig.targetNetwork.id,
     chainId: TARGET_NETWORK.id,
     query: {
       enabled: defaultWatch,

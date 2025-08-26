@@ -26,7 +26,6 @@ const appConfig: AppConfig = {
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
 
-  // TODO: Check this Alchemy API key to make sure it accepts Arbitrum mainnet
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || 'rEjtgJdffu-YuX-yux6nhRYH5NFrllnO',
 
   hypersyncBearerToken: process.env.NEXT_PUBLIC_HYPERSYNC_BEARER_TOKEN || '',
