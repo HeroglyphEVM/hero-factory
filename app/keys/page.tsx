@@ -1,14 +1,14 @@
-"use client"
-import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useGetFactoryKeys } from '@/hooks/factory/useGetFactoryKeys'
-import { KeyTable } from './_components/KeyTable'
-import { KeyTableSkeleton } from './_components/KeyTableSkeleton'
+'use client';
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGetFactoryKeys } from '@/hooks/factory/useGetFactoryKeys';
+import { KeyTable } from './_components/KeyTable';
+import { KeyTableSkeleton } from './_components/KeyTableSkeleton';
 
 export default function Keys() {
   const [activeTab, setActiveTab] = useState('all');
   const { keys, myKeys, isLoading } = useGetFactoryKeys();
-  console.log("Keys ", keys)
+  console.log('Keys ', keys);
   return (
     <div className="py-5 px-2 mt-5 pb-16 md:pb-5">
       <main className="flex-grow p-4 overflow-auto">
@@ -18,12 +18,8 @@ export default function Keys() {
               <TabsTrigger value="all">All Keys</TabsTrigger>
               <TabsTrigger value="my">My Keys</TabsTrigger>
             </TabsList>
-            <TabsContent value="all">
-              {isLoading ? <KeyTableSkeleton /> : <KeyTable keys={keys} />}
-            </TabsContent>
-            <TabsContent value="my">
-              {isLoading ? <KeyTableSkeleton /> : <KeyTable keys={myKeys} />}
-            </TabsContent>
+            <TabsContent value="all">{isLoading ? <KeyTableSkeleton /> : <KeyTable keys={keys} />}</TabsContent>
+            <TabsContent value="my">{isLoading ? <KeyTableSkeleton /> : <KeyTable keys={myKeys} />}</TabsContent>
           </Tabs>
         </div>
       </main>

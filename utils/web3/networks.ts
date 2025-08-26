@@ -1,5 +1,6 @@
-import appConfig from "@/app.config";
-import * as chains from "viem/chains";
+import appConfig from '@/app.config';
+import { TARGET_NETWORK } from '@/services/web3/wagmiConfig';
+import * as chains from 'viem/chains';
 
 // Mapping of chainId to RPC chain name an format followed by Envio
 // export const RPC_CHAIN_NAMES: Record<number, string> = {
@@ -35,32 +36,24 @@ import * as chains from "viem/chains";
 // ! The code below is for Alchemy, use if we need to switch back to it.
 
 export const RPC_CHAIN_NAMES: Record<number, string> = {
-  [chains.mainnet.id]: "eth-mainnet",
-  [chains.goerli.id]: "eth-goerli",
-  [chains.sepolia.id]: "eth-sepolia",
-  [chains.optimism.id]: "opt-mainnet",
-  [chains.optimismGoerli.id]: "opt-goerli",
-  [chains.optimismSepolia.id]: "opt-sepolia",
-  [chains.arbitrum.id]: "arb-mainnet",
-  [chains.arbitrumGoerli.id]: "arb-goerli",
-  [chains.arbitrumSepolia.id]: "arb-sepolia",
-  [chains.polygon.id]: "polygon-mainnet",
-  [chains.polygonMumbai.id]: "polygon-mumbai",
-  [chains.polygonAmoy.id]: "polygon-amoy",
-  [chains.astar.id]: "astar-mainnet",
-  [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
-  [chains.polygonZkEvmTestnet.id]: "polygonzkevm-testnet",
-  [chains.base.id]: "base-mainnet",
-  [chains.baseGoerli.id]: "base-goerli",
-  [chains.baseSepolia.id]: "base-sepolia",
-};
-
-export enum EAppNetworks {
-  ARBITRUM = 42161,
-}
-
-export const NETWORK_TO_CHAIN: Record<EAppNetworks, chains.Chain> = {
-  [EAppNetworks.ARBITRUM]: chains.arbitrum,
+  [chains.mainnet.id]: 'eth-mainnet',
+  [chains.goerli.id]: 'eth-goerli',
+  [chains.sepolia.id]: 'eth-sepolia',
+  [chains.optimism.id]: 'opt-mainnet',
+  [chains.optimismGoerli.id]: 'opt-goerli',
+  [chains.optimismSepolia.id]: 'opt-sepolia',
+  [chains.arbitrum.id]: 'arb-mainnet',
+  [chains.arbitrumGoerli.id]: 'arb-goerli',
+  [chains.arbitrumSepolia.id]: 'arb-sepolia',
+  [chains.polygon.id]: 'polygon-mainnet',
+  [chains.polygonMumbai.id]: 'polygon-mumbai',
+  [chains.polygonAmoy.id]: 'polygon-amoy',
+  [chains.astar.id]: 'astar-mainnet',
+  [chains.polygonZkEvm.id]: 'polygonzkevm-mainnet',
+  [chains.polygonZkEvmTestnet.id]: 'polygonzkevm-testnet',
+  [chains.base.id]: 'base-mainnet',
+  [chains.baseGoerli.id]: 'base-goerli',
+  [chains.baseSepolia.id]: 'base-sepolia',
 };
 
 export const getRpcHttpUrl = (chainId: number) => {
@@ -70,10 +63,10 @@ export const getRpcHttpUrl = (chainId: number) => {
 };
 
 export function getBlockExplorerTxLink(txnHash: string) {
-  const targetChain = appConfig.targetNetwork;
-  const blockExplorerTxURL = targetChain?.blockExplorers?.default?.url;
+  // const targetChain = appConfig.targetNetwork;
+  const blockExplorerTxURL = TARGET_NETWORK?.blockExplorers?.default?.url;
   if (!blockExplorerTxURL) {
-    return "";
+    return '';
   }
 
   return `${blockExplorerTxURL}/tx/${txnHash}`;
