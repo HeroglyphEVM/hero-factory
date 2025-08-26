@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Rocket } from "lucide-react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { HeroTokenFormType } from "./factory-types";
-import { Switch } from "../ui/switch";
-import { ImageUploader } from "./ImageUploader";
+import { useState } from 'react';
+import { Rocket } from 'lucide-react';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { HeroTokenFormType } from './factory-types';
+import { Switch } from '../ui/switch';
+import { ImageUploader } from './ImageUploader';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 type FormErrors = {
   [K in keyof HeroTokenFormType]?: string;
@@ -15,54 +17,51 @@ type FormErrors = {
 const errorMessages: {
   [key: string]: (value: string, maxSupply?: string) => string;
 } = {
-  type: (value) => (value.trim() == "hero" ? "" : "Type must be hero"),
-  coinName: (value) =>
+  type: value => (value.trim() == 'hero' ? '' : 'Type must be hero'),
+  coinName: value =>
     !value.trim()
-      ? "Token name is required"
+      ? 'Token name is required'
       : value.length > 24
-      ? "Token name must be less than 25 characters"
-      : "",
-  symbol: (value) => (!value.trim() ? "Symbol is required" : ""),
-  maxSupply: (value) =>
+      ? 'Token name must be less than 25 characters'
+      : '',
+  symbol: value => (!value.trim() ? 'Symbol is required' : ''),
+  maxSupply: value =>
     !value || isNaN(Number(value)) || Number(value) <= 0
-      ? "Max supply must be a positive number"
+      ? 'Max supply must be a positive number'
       : Number(value) > 1e15
-      ? "Max supply must be less than 1 quadrillion"
-      : "",
+      ? 'Max supply must be less than 1 quadrillion'
+      : '',
   preMintAmount: (value, maxSupply) => {
     if (!value || isNaN(Number(value)) || Number(value) < 0)
-      return "Pre-mint amount must be a non-negative number";
+      return 'Pre-mint amount must be a non-negative number';
     if (maxSupply && Number(value) > Number(maxSupply))
-      return "Pre-mint amount cannot be larger than max supply";
-    return "";
+      return 'Pre-mint amount cannot be larger than max supply';
+    return '';
   },
-  rewardsPerBlock: (value) =>
+  rewardsPerBlock: value =>
     !value || isNaN(Number(value)) || Number(value) < 0
-      ? "Rewards per graffiti must be a non-negative number"
-      : "",
-  taxRate: (value) =>
+      ? 'Rewards per graffiti must be a non-negative number'
+      : '',
+  taxRate: value =>
     !value || isNaN(Number(value)) || Number(value) < 0
-      ? "Tax rate must be a non-negative number"
-      : "",
-  crossChainFee: (value) =>
+      ? 'Tax rate must be a non-negative number'
+      : '',
+  crossChainFee: value =>
     !value || isNaN(Number(value)) || Number(value) < 0
-      ? "Cross-chain fee must be a non-negative number"
-      : "",
-  lzGasLimit: (value) =>
+      ? 'Cross-chain fee must be a non-negative number'
+      : '',
+  lzGasLimit: value =>
     !value || isNaN(Number(value)) || Number(value) <= 0
-      ? "LayerZero gas limit must be a positive number"
-      : "",
-  maxBonusRewardAfterOneDay: (value) =>
+      ? 'LayerZero gas limit must be a positive number'
+      : '',
+  maxBonusRewardAfterOneDay: value =>
     !value || isNaN(Number(value)) || Number(value) < 0
-      ? "Max bonus reward must be a non-negative number"
-      : "",
-  treasury: (value) =>
-    /^0x[a-fA-F0-9]{40}$/.test(value) ? "" : "Invalid Ethereum address",
-  feePayer: (value) =>
-    /^0x[a-fA-F0-9]{40}$/.test(value) ? "" : "Invalid Ethereum address",
-  owner: (value) =>
-    /^0x[a-fA-F0-9]{40}$/.test(value) ? "" : "Invalid Ethereum address",
-  image: (value) => (value ? "" : "Image is required"),
+      ? 'Max bonus reward must be a non-negative number'
+      : '',
+  treasury: value => (/^0x[a-fA-F0-9]{40}$/.test(value) ? '' : 'Invalid Ethereum address'),
+  feePayer: value => (/^0x[a-fA-F0-9]{40}$/.test(value) ? '' : 'Invalid Ethereum address'),
+  owner: value => (/^0x[a-fA-F0-9]{40}$/.test(value) ? '' : 'Invalid Ethereum address'),
+  image: value => (value ? '' : 'Image is required'),
 };
 
 export const HeroTokenForm = ({
@@ -70,30 +69,32 @@ export const HeroTokenForm = ({
 }: {
   onFormSubmit: (formData: HeroTokenFormType) => void;
 }) => {
+  const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const [formData, setFormData] = useState<HeroTokenFormType>({
     isPro: false,
-    type: "hero",
-    coinName: "",
-    symbol: "",
-    maxSupply: "",
-    preMintAmount: "",
-    rewardsPerBlock: "",
-    maxBonusRewardAfterOneDay: "",
-    treasury: "",
-    feePayer: "",
-    crossChainFee: "",
-    lzGasLimit: "",
-    owner: "",
+    type: 'hero',
+    coinName: '',
+    symbol: '',
+    maxSupply: '',
+    preMintAmount: '',
+    rewardsPerBlock: '',
+    maxBonusRewardAfterOneDay: '',
+    treasury: '',
+    feePayer: '',
+    crossChainFee: '',
+    lzGasLimit: '',
+    owner: '',
     image: null,
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    setFormData(prev => ({ ...prev, [id]: value }));
     // Clear error when user starts typing
     if (errors[id as keyof HeroTokenFormType]) {
-      setErrors((prev) => ({ ...prev, [id]: undefined }));
+      setErrors(prev => ({ ...prev, [id]: undefined }));
     }
   };
 
@@ -101,22 +102,16 @@ export const HeroTokenForm = ({
     const newErrors: FormErrors = {};
     let isValid = true;
 
-    Object.keys(formData).forEach((key) => {
+    Object.keys(formData).forEach(key => {
       if (
-        key === "isPro" ||
+        key === 'isPro' ||
         (!formData.isPro &&
-          [
-            "treasury",
-            "feePayer",
-            "crossChainFee",
-            "lzGasLimit",
-            "owner",
-          ].includes(key))
+          ['treasury', 'feePayer', 'crossChainFee', 'lzGasLimit', 'owner'].includes(key))
       ) {
         return;
       }
       const value = formData[key as keyof HeroTokenFormType];
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         const errorMessage = errorMessages[key](value, formData.maxSupply);
         if (errorMessage) {
           newErrors[key as keyof HeroTokenFormType] = errorMessage;
@@ -125,7 +120,7 @@ export const HeroTokenForm = ({
       }
     });
     if (!formData.image) {
-      newErrors.image = "Image is required";
+      newErrors.image = 'Image is required';
       isValid = false;
     }
 
@@ -135,12 +130,16 @@ export const HeroTokenForm = ({
 
   const handleImageChange = (file: File | null) => {
     if (file) {
-      setErrors((prev) => ({ ...prev, image: undefined }));
+      setErrors(prev => ({ ...prev, image: undefined }));
     }
-    setFormData((prev) => ({ ...prev, image: file }));
+    setFormData(prev => ({ ...prev, image: file }));
   };
 
   const handleCreate = () => {
+    if (!isConnected) {
+      openConnectModal?.();
+      return;
+    }
     if (validateForm()) {
       onFormSubmit(formData);
     }
@@ -150,25 +149,21 @@ export const HeroTokenForm = ({
     id: keyof HeroTokenFormType,
     label: string,
     placeholder: string,
-    type = "text"
+    type = 'text',
   ) => (
     <div>
       <Label htmlFor={id} className="text-white font-bold">
         {label}
       </Label>
-      <div
-        className={`flex items-center ${
-          errors[id] ? "border border-red-500 rounded-md" : ""
-        }`}
-      >
-        {id === "symbol" && <span className="pl-3 pr-2 text-gray-500">$</span>}
+      <div className={`flex items-center ${errors[id] ? 'border border-red-500 rounded-md' : ''}`}>
+        {id === 'symbol' && <span className="pl-3 pr-2 text-gray-500">$</span>}
         <Input
           id={id}
           type={type}
           placeholder={placeholder}
           value={String(formData[id])}
           onChange={handleInputChange}
-          className={`flex-grow ${errors[id] ? "border-0" : ""}`}
+          className={`flex-grow ${errors[id] ? 'border-0' : ''}`}
         />
       </div>
       {errors[id] && <p className="text-red-500 text-sm mt-1">{errors[id]}</p>}
@@ -186,9 +181,7 @@ export const HeroTokenForm = ({
                 <span>Pro</span>
                 <Switch
                   checked={formData.isPro}
-                  onCheckedChange={(checked) =>
-                    setFormData((prev) => ({ ...prev, isPro: checked }))
-                  }
+                  onCheckedChange={checked => setFormData(prev => ({ ...prev, isPro: checked }))}
                 />
               </div>
             </div>
@@ -197,66 +190,36 @@ export const HeroTokenForm = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {renderInput("coinName", "Token Name", "Enter your token name")}
-          {renderInput("symbol", "Token Symbol", "Enter your token symbol")}
-          {renderInput("maxSupply", "Max Supply", "Enter max supply", "number")}
+          {renderInput('coinName', 'Token Name', 'Enter your token name')}
+          {renderInput('symbol', 'Token Symbol', 'Enter your token symbol')}
+          {renderInput('maxSupply', 'Max Supply', 'Enter max supply', 'number')}
+          {renderInput('preMintAmount', 'Pre Mint Amount', 'Enter pre-mint amount', 'number')}
+          {renderInput('rewardsPerBlock', 'Rewards per block', 'Enter rewards per block', 'number')}
           {renderInput(
-            "preMintAmount",
-            "Pre Mint Amount",
-            "Enter pre-mint amount",
-            "number"
-          )}
-          {renderInput(
-            "rewardsPerBlock",
-            "Rewards per block",
-            "Enter rewards per block",
-            "number"
-          )}
-          {renderInput(
-            "maxBonusRewardAfterOneDay",
-            "Max Bonus Reward After One Day",
-            "Enter max bonus reward after one day",
-            "number"
+            'maxBonusRewardAfterOneDay',
+            'Max Bonus Reward After One Day',
+            'Enter max bonus reward after one day',
+            'number',
           )}
 
           {formData.isPro && (
             <>
+              {renderInput('treasury', 'Treasury', 'Enter treasury address', 'text')}
+              {renderInput('feePayer', 'Fee Payer', 'Enter fee payer address', 'text')}
+              {renderInput('crossChainFee', 'Cross Chain Fee', 'Enter cross chain fee', 'number')}
               {renderInput(
-                "treasury",
-                "Treasury",
-                "Enter treasury address",
-                "text"
+                'lzGasLimit',
+                'LayerZero Gas Limit',
+                'Enter layer zero gas limit',
+                'number',
               )}
-              {renderInput(
-                "feePayer",
-                "Fee Payer",
-                "Enter fee payer address",
-                "text"
-              )}
-              {renderInput(
-                "crossChainFee",
-                "Cross Chain Fee",
-                "Enter cross chain fee",
-                "number"
-              )}
-              {renderInput(
-                "lzGasLimit",
-                "LayerZero Gas Limit",
-                "Enter layer zero gas limit",
-                "number"
-              )}
-              {renderInput("owner", "Owner", "Enter owner address", "text")}
+              {renderInput('owner', 'Owner', 'Enter owner address', 'text')}
             </>
           )}
           <ImageUploader onChange={handleImageChange} />
-          {errors["image"] && (
-            <p className="text-red-500 text-sm mt-1">{errors["image"]}</p>
-          )}
-          <Button
-            onClick={handleCreate}
-            className="w-full bg-muted hover:bg-muted/60"
-          >
-            <Rocket className="mr-2 h-4 w-4 " />{" "}
+          {errors['image'] && <p className="text-red-500 text-sm mt-1">{errors['image']}</p>}
+          <Button onClick={handleCreate} className="w-full bg-muted hover:bg-muted/60">
+            <Rocket className="mr-2 h-4 w-4 " />{' '}
             <span className="text-yellow-500 font-bold">Create Token</span>
           </Button>
         </div>
