@@ -1,12 +1,12 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { KeyData } from "@/types/key-types"
-import { Address } from "viem"
-import { TableSkeleton } from "./TransfersTable/TransfersTableSkeleton"
-import { TransfersTable } from "./TransfersTable/TransfersTable"
-import { useGetRecentKeyTransfers } from "@/hooks/keys/useGetRecentKeyTransfers"
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { KeyData } from '@/types/key-types';
+import { Address } from 'viem';
+import { TableSkeleton } from './TransfersTable/TransfersTableSkeleton';
+import { TransfersTable } from './TransfersTable/TransfersTable';
+import { useGetRecentKeyTransfers } from '@/hooks/keys/useGetRecentKeyTransfers';
 
 export const RecentKeyTransfersCard = ({ keyData }: { keyData: KeyData }) => {
-  const { data: recentTransfers, isLoading } = useGetRecentKeyTransfers(keyData.address as Address)
+  const { data: recentTransfers, isLoading } = useGetRecentKeyTransfers(keyData.address as Address);
 
   return (
     <Card className="">
@@ -15,13 +15,9 @@ export const RecentKeyTransfersCard = ({ keyData }: { keyData: KeyData }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {isLoading ? (
-            <TableSkeleton />
-          ) : (
-            <TransfersTable transfers={recentTransfers ?? []} />
-          )}
+          {isLoading ? <TableSkeleton /> : <TransfersTable transfers={recentTransfers ?? []} />}
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
