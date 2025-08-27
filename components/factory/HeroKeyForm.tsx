@@ -9,6 +9,7 @@ import { Switch } from '../ui/switch';
 import { ImageUploader } from './ImageUploader';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useGetFactoryKeys } from '@/hooks/factory/useGetFactoryKeys';
 
 type FormErrors = {
   [K in keyof HeroKeyFormType]?: string;
@@ -56,6 +57,7 @@ export const HeroKeyForm = ({
   onFormSubmit: (formData: HeroKeyFormType) => void;
 }) => {
   const { isConnected } = useAccount();
+  const { keys } = useGetFactoryKeys();
   const { openConnectModal } = useConnectModal();
   const [formData, setFormData] = useState<HeroKeyFormType>({
     type: 'key',
@@ -85,9 +87,28 @@ export const HeroKeyForm = ({
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     let isValid = true;
+
     Object.keys(formData).forEach(key => {
       const typedKey = key as keyof HeroKeyFormType;
       const value = formData[typedKey];
+
+      if (typeof key === 'string') {
+        if (key === 'keyName') {
+          const existingKey = keys.find(key => key.name === value);
+          if (existingKey) {
+            newErrors.keyName = 'Key name already exists';
+            isValid = false;
+          }
+        }
+        if (key === 'symbol') {
+          const existingKey = keys.find(key => key.symbol === value);
+          if (existingKey) {
+            newErrors.symbol = 'Symbol already exists';
+            isValid = false;
+          }
+        }
+      }
+
       const errorFunction = errorMessages[typedKey];
       if (
         errorFunction &&
@@ -135,7 +156,6 @@ export const HeroKeyForm = ({
     }
     if (validateForm()) {
       onFormSubmit(formData);
-      // setIsPreviewOpen(true)
     }
   };
 

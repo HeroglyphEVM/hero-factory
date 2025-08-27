@@ -11,11 +11,11 @@ import { TokenFormData, KeyFormData } from './factory-types';
 
 export const TokenFactory = () => {
   const [activeTab, setActiveTab] = useState('regular');
-  const [isCreated, setIsCreated] = useState(false);
-  // const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [isKeyPreviewOpen, setIsKeyPreviewOpen] = useState(false);
-  const [isTokenPreviewOpen, setIsTokenPreviewOpen] = useState(false);
-  const [contractAddress, setContractAddress] = useState('');
+  const [isTokenCreated, setIsTokenCreated] = useState<boolean>(false);
+  const [isKeyCreated, setIsKeyCreated] = useState<boolean>(false);
+  const [isKeyPreviewOpen, setIsKeyPreviewOpen] = useState<boolean>(false);
+  const [isTokenPreviewOpen, setIsTokenPreviewOpen] = useState<boolean>(false);
+  const [contractAddress, setContractAddress] = useState<string>('');
   const [tokenFormData, setTokenFormData] = useState<TokenFormData>();
   const [keyFormData, setKeyFormData] = useState<KeyFormData>();
 
@@ -30,7 +30,11 @@ export const TokenFactory = () => {
     setIsTokenPreviewOpen(false);
   };
   const handleTokenCreated = (address: string) => {
-    setIsCreated(true);
+    setIsTokenCreated(true);
+    setContractAddress(address);
+  };
+  const handleKeyCreated = (address: string) => {
+    setIsKeyCreated(true);
     setContractAddress(address);
   };
   const handleCloseReviewDialog = () => {
@@ -42,12 +46,20 @@ export const TokenFactory = () => {
     }
   };
   const handleCloseTokenCreatedDialog = () => {
-    setIsCreated(false);
+    setIsTokenCreated(false);
+  };
+
+  const handleCloseKeyCreatedDialog = () => {
+    setIsKeyCreated(false);
   };
 
   return (
     <div className="p-2 w-full max-w-3xl mx-auto">
-      <Tabs defaultValue="regular" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        defaultValue="regular"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4">
         <TabsList className="grid w-full grid-cols-2 h-auto">
           <TabsTrigger
             value="regular"
@@ -69,7 +81,7 @@ export const TokenFactory = () => {
           <HeroKeyForm onFormSubmit={handleKeyFormSubmit} />
         </TabsContent>
       </Tabs>
-      {tokenFormData && (
+      {tokenFormData && !isTokenCreated && (
         <TokenPreviewDialog
           formData={tokenFormData}
           isOpen={isTokenPreviewOpen}
@@ -77,17 +89,17 @@ export const TokenFactory = () => {
           onTokenCreated={handleTokenCreated}
         />
       )}
-      {keyFormData && keyFormData.keyName && (
+      {keyFormData && keyFormData.keyName && !isKeyCreated && (
         <KeyPreviewDialog
           formData={keyFormData}
           isOpen={isKeyPreviewOpen}
           onClose={handleCloseReviewDialog}
-          onKeyCreated={handleTokenCreated}
+          onKeyCreated={handleKeyCreated}
         />
       )}
       {tokenFormData && (
         <TokenCreatedDialog
-          isOpen={isCreated}
+          isOpen={isTokenCreated}
           onClose={handleCloseTokenCreatedDialog}
           symbol={tokenFormData.symbol}
           coinName={tokenFormData.coinName}
@@ -97,8 +109,8 @@ export const TokenFactory = () => {
       )}
       {keyFormData && (
         <KeyCreatedDialog
-          isOpen={isCreated}
-          onClose={handleCloseTokenCreatedDialog}
+          isOpen={isKeyCreated}
+          onClose={handleCloseKeyCreatedDialog}
           symbol={keyFormData.symbol}
           keyName={keyFormData.keyName}
           keyAddress={contractAddress}

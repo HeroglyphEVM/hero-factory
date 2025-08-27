@@ -1,6 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Button } from '../ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
 import { Hex, keccak256, parseAbi, parseUnits, toHex } from 'viem';
 import { KEY_RECIPE_ADDRESS } from '@/services/web3/constants';
 import { useContractWrite } from '@/hooks/useContractWrite';
@@ -26,7 +33,7 @@ const KEY_RECIPE_ABI = [
 ];
 
 export const KeyPreviewDialog = ({ isOpen, onClose, onKeyCreated, formData }: KeyPreviewProps) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { address } = useAccount();
   const config = useConfig();
 
@@ -75,7 +82,9 @@ export const KeyPreviewDialog = ({ isOpen, onClose, onKeyCreated, formData }: Ke
           hash: tx as Hex,
         });
         const heroTokenCreatedTopic = keccak256(toHex('HeroKeyCreated(address,address,uint256)'));
-        const heroTokenCreatedEvent = receipt.logs.find(log => log.topics[0] === heroTokenCreatedTopic);
+        const heroTokenCreatedEvent = receipt.logs.find(
+          log => log.topics[0] === heroTokenCreatedTopic,
+        );
         if (heroTokenCreatedEvent && heroTokenCreatedEvent.topics[1]) {
           const tokenAddress = `0x${heroTokenCreatedEvent.topics[1].slice(26)}` as `0x${string}`;
           onKeyCreated(tokenAddress);
@@ -125,7 +134,10 @@ export const KeyPreviewDialog = ({ isOpen, onClose, onKeyCreated, formData }: Ke
               <>
                 <PreviewInfoItem label="Base Cost" value={formData.baseCost} />
                 <PreviewInfoItem label="Cost Increment" value={formData.costIncrement} />
-                <PreviewInfoItem label="Payment Token" value={beautifyAddress(formData.paymentToken)} />
+                <PreviewInfoItem
+                  label="Payment Token"
+                  value={beautifyAddress(formData.paymentToken)}
+                />
                 <PreviewInfoItem label="Treasury" value={beautifyAddress(formData.treasury)} />
                 <PreviewInfoItem label="Fee Payer" value={beautifyAddress(formData.feePayer)} />
                 <PreviewInfoItem label="Owner" value={beautifyAddress(formData.owner)} />

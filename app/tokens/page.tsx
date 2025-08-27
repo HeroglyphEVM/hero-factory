@@ -1,12 +1,12 @@
-"use client";
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetFactoryTokens } from "@/hooks/factory/useGetFactoryTokens";
-import { TokenTable } from "./_components/TokenTable";
-import { TokenTableSkeleton } from "./_components/TokenTableSkeleton";
+'use client';
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGetFactoryTokens } from '@/hooks/factory/useGetFactoryTokens';
+import { TokenTable } from './_components/TokenTable';
+import { TokenTableSkeleton } from './_components/TokenTableSkeleton';
 
 export default function Tokens() {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState('all');
   const { tokens, myTokens, isLoading } = useGetFactoryTokens();
 
   return (
@@ -19,18 +19,10 @@ export default function Tokens() {
               <TabsTrigger value="my">My Tokens</TabsTrigger>
             </TabsList>
             <TabsContent value="all">
-              {isLoading ? (
-                <TokenTableSkeleton />
-              ) : (
-                <TokenTable tokens={tokens} />
-              )}
+              {isLoading ? <TokenTableSkeleton /> : <TokenTable tokens={tokens} />}
             </TabsContent>
             <TabsContent value="my">
-              {isLoading ? (
-                <TokenTableSkeleton />
-              ) : (
-                <TokenTable tokens={myTokens} />
-              )}
+              {isLoading ? <TokenTableSkeleton /> : <TokenTable tokens={myTokens} />}
             </TabsContent>
           </Tabs>
         </div>

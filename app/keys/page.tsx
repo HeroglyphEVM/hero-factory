@@ -29,5 +29,3 @@ export default function Keys() {
     </div>
   );
 }
-
-// ! Also have to make sure the Create Key window closes once the key has been created so that the pop up after is the only thing on the screen.

@@ -9,6 +9,7 @@ import { Switch } from '../ui/switch';
 import { ImageUploader } from './ImageUploader';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useGetFactoryTokens } from '@/hooks/factory/useGetFactoryTokens';
 
 type FormErrors = {
   [K in keyof HeroTokenFormType]?: string;
@@ -70,6 +71,7 @@ export const HeroTokenForm = ({
   onFormSubmit: (formData: HeroTokenFormType) => void;
 }) => {
   const { isConnected } = useAccount();
+  const { tokens } = useGetFactoryTokens();
   const { openConnectModal } = useConnectModal();
   const [formData, setFormData] = useState<HeroTokenFormType>({
     isPro: false,
@@ -116,6 +118,20 @@ export const HeroTokenForm = ({
         if (errorMessage) {
           newErrors[key as keyof HeroTokenFormType] = errorMessage;
           isValid = false;
+        }
+        if (key === 'coinName') {
+          const existingToken = tokens.find(token => token.name === value);
+          if (existingToken) {
+            newErrors.coinName = 'Token name already exists';
+            isValid = false;
+          }
+        }
+        if (key === 'symbol') {
+          const existingToken = tokens.find(token => token.symbol === value);
+          if (existingToken) {
+            newErrors.symbol = 'Symbol already exists';
+            isValid = false;
+          }
         }
       }
     });
