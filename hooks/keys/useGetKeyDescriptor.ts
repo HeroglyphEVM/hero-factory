@@ -1,6 +1,6 @@
-import { fetchTokenMetadata } from "@/services/pinata/pinataService";
-import { KeyDescriptor } from "@/types/key-types";
-import { useEffect, useState } from "react";
+import { fetchTokenMetadata } from '@/services/pinata/pinataService';
+import { KeyDescriptor } from '@/types/key-types';
+import { useEffect, useState } from 'react';
 
 type GetKeyDescriptorResponse = {
   data: KeyDescriptor;
@@ -10,11 +10,11 @@ type GetKeyDescriptorResponse = {
 
 export const useGetKeyDescriptor = (cid?: string): GetKeyDescriptorResponse => {
   const [data, setData] = useState<KeyDescriptor>({
-    description: "",
-    website: "",
-    x: "",
-    telegram: "",
-    chat: "",
+    description: '',
+    website: '',
+    x: '',
+    telegram: '',
+    chat: '',
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -38,15 +38,14 @@ export const useGetKeyDescriptor = (cid?: string): GetKeyDescriptorResponse => {
   }, [cid]);
 
   return { data, isLoading, isError };
-}
+};
 
-const parseMetadata = (metadata: any): KeyDescriptor => { 
-  console.log("metadata", metadata)
+const parseMetadata = (metadata: any): KeyDescriptor => {
   return {
-    description: metadata.description || "",
-    website: metadata.website || "",
-    x: metadata.x || "",
-    telegram: metadata.telegram || "",
-    chat: metadata.chat || "",
-  }
-}
+    description: metadata.description || '',
+    website: metadata.website || '',
+    x: metadata.x || '',
+    telegram: metadata.telegram || '',
+    chat: metadata.chat || '',
+  };
+};
