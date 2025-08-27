@@ -1,24 +1,14 @@
-import { useState } from "react";
-import { MutateOptions } from "@tanstack/react-query";
-import { Abi } from "abitype";
-import {
-  AbiStateMutability,
-  Address,
-  ContractFunctionArgs,
-  ContractFunctionName,
-  Hex,
-} from "viem";
-import {
-  Config,
-  UseWriteContractParameters,
-  useAccount,
-  useWriteContract,
-} from "wagmi";
-import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
-import { WriteContractVariables } from "wagmi/query";
-import { useTransactor } from "./useTransactor";
-import appConfig from "@/app.config";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { MutateOptions } from '@tanstack/react-query';
+import { Abi } from 'abitype';
+import { AbiStateMutability, Address, ContractFunctionArgs, ContractFunctionName, Hex } from 'viem';
+import { Config, UseWriteContractParameters, useAccount, useWriteContract } from 'wagmi';
+import { WriteContractErrorType, WriteContractReturnType } from 'wagmi/actions';
+import { WriteContractVariables } from 'wagmi/query';
+import { useTransactor } from './useTransactor';
+import appConfig from '@/app.config';
+import { useToast } from '@/hooks/use-toast';
+import { TARGET_NETWORK } from '@/services/web3/wagmiConfig';
 
 export type WriteContractConfig = {
   contractAddress: Hex;
@@ -40,7 +30,7 @@ export const useContractWrite = ({
   const { chain, isConnected } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
-  const targetNetwork = appConfig.targetNetwork;
+
   const { toast } = useToast();
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
@@ -48,15 +38,15 @@ export const useContractWrite = ({
   const sendContractWriteAsyncTx = async (variables?: any, options?: any) => {
     if (!isConnected) {
       toast({
-        description: "Please connect your wallet",
-        variant: "destructive",
+        description: 'Please connect your wallet',
+        variant: 'destructive',
       });
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
+    if (chain?.id !== TARGET_NETWORK.id) {
       toast({
-        description: "You are on the wrong network",
-        variant: "destructive",
+        description: 'You are on the wrong network',
+        variant: 'destructive',
       });
       return;
     }
@@ -104,15 +94,15 @@ export const useContractWrite = ({
   const sendContractWriteTx = (variables: any, options?: any) => {
     if (!isConnected) {
       toast({
-        description: "Please connect your wallet",
-        variant: "destructive",
+        description: 'Please connect your wallet',
+        variant: 'destructive',
       });
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
+    if (chain?.id !== TARGET_NETWORK.id) {
       toast({
-        description: "You are on the wrong network",
-        variant: "destructive",
+        description: 'You are on the wrong network',
+        variant: 'destructive',
       });
       return;
     }

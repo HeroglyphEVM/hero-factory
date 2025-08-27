@@ -1,26 +1,20 @@
-import appConfig from "@/app.config";
-import { QueryObserverBaseResult, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { Abi, AbiStateMutability, ContractFunctionArgs, ContractFunctionName, Hex } from "viem";
-import { baseSepolia } from "viem/chains";
-import { useBlockNumber, useReadContract } from "wagmi";
+import appConfig from '@/app.config';
+import { TARGET_NETWORK } from '@/services/web3/wagmiConfig';
+import { QueryObserverBaseResult, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { Abi, AbiStateMutability, ContractFunctionArgs, ContractFunctionName, Hex } from 'viem';
+import { baseSepolia } from 'viem/chains';
+import { useBlockNumber, useReadContract } from 'wagmi';
 
 export type TQueryContractParams = {
-  contractAddress: Hex
-  functionName: string
-  args?: ContractFunctionArgs<Abi, AbiStateMutability, ContractFunctionName>
-  abi: Abi
-  watch?: boolean
-}
+  contractAddress: Hex;
+  functionName: string;
+  args?: ContractFunctionArgs<Abi, AbiStateMutability, ContractFunctionName>;
+  abi: Abi;
+  watch?: boolean;
+};
 
-export const useContractQuery = ({
-  contractAddress,
-  functionName,
-  args,
-  abi,
-  watch
-}: TQueryContractParams) => {
-
+export const useContractQuery = ({ contractAddress, functionName, args, abi, watch }: TQueryContractParams) => {
   const readContractHookRes = useReadContract({
     // chainId: baseSepolia.id,
     abi,
@@ -32,14 +26,14 @@ export const useContractQuery = ({
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       staleTime: 10 * 60 * 1000, // 10 mins
-      retry: 1
+      retry: 1,
     },
   });
 
   const defaultWatch = watch ?? true;
   const { data: blockNumber } = useBlockNumber({
     watch: defaultWatch,
-    chainId: appConfig.targetNetwork.id,
+    chainId: TARGET_NETWORK.id,
     query: {
       enabled: defaultWatch,
     },

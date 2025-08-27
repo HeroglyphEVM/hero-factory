@@ -18,17 +18,15 @@ export const fetchFromUrl = async (url: string) => {
       const text = await response.text();
       return text;
     }
-
   } catch (error) {
     console.error("Error fetching from URL:", error);
     throw error;
   }
 };
 
-
 export const resolveUrl = (url: string) => {
-  if (url.startsWith('ipfs://')) {
-    return url.replace('ipfs://', 'https://gateway.pinata.cloud/ipfs/');
+  if (url.startsWith("ipfs://")) {
+    return url.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
   }
   return url;
-}
+};

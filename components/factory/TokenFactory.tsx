@@ -1,56 +1,75 @@
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Coins, Key } from "lucide-react"
-import { HeroTokenForm } from "@/components/factory/HeroTokenForm"
-import { HeroKeyForm } from "@/components/factory/HeroKeyForm"
-import { TokenPreviewDialog } from "./TokenPreviewDialog"
-import { KeyPreviewDialog } from "./KeyPreviewDialog"
-import { TokenCreatedDialog } from "./TokenCreatedDialog"
-import { KeyCreatedDialog } from "./KeyCreatedDialog"
-import { TokenFormData, KeyFormData } from "./factory-types"
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Coins, Key } from 'lucide-react';
+import { HeroTokenForm } from '@/components/factory/HeroTokenForm';
+import { HeroKeyForm } from '@/components/factory/HeroKeyForm';
+import { TokenPreviewDialog } from './TokenPreviewDialog';
+import { KeyPreviewDialog } from './KeyPreviewDialog';
+import { TokenCreatedDialog } from './TokenCreatedDialog';
+import { KeyCreatedDialog } from './KeyCreatedDialog';
+import { TokenFormData, KeyFormData } from './factory-types';
 
 export const TokenFactory = () => {
-  const [activeTab, setActiveTab] = useState("regular")
-  const [isCreated, setIsCreated] = useState(false)
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const [contractAddress, setContractAddress] = useState("")
-  const [tokenFormData, setTokenFormData] = useState<TokenFormData>()
-  const [keyFormData, setKeyFormData] = useState<KeyFormData>()
+  const [activeTab, setActiveTab] = useState('regular');
+  const [isTokenCreated, setIsTokenCreated] = useState<boolean>(false);
+  const [isKeyCreated, setIsKeyCreated] = useState<boolean>(false);
+  const [isKeyPreviewOpen, setIsKeyPreviewOpen] = useState<boolean>(false);
+  const [isTokenPreviewOpen, setIsTokenPreviewOpen] = useState<boolean>(false);
+  const [contractAddress, setContractAddress] = useState<string>('');
+  const [tokenFormData, setTokenFormData] = useState<TokenFormData>();
+  const [keyFormData, setKeyFormData] = useState<KeyFormData>();
 
   const handleTokenFormSubmit = (formData: TokenFormData) => {
-    setTokenFormData(formData)
-    setIsPreviewOpen(true)
-  }
+    setTokenFormData(formData);
+    setIsTokenPreviewOpen(true);
+    setIsKeyPreviewOpen(false);
+  };
   const handleKeyFormSubmit = (formData: KeyFormData) => {
-    setKeyFormData(formData)
-    setIsPreviewOpen(true)
-  }
+    setKeyFormData(formData);
+    setIsKeyPreviewOpen(true);
+    setIsTokenPreviewOpen(false);
+  };
   const handleTokenCreated = (address: string) => {
-    setIsCreated(true)
-    setContractAddress(address)
-  }
+    setIsTokenCreated(true);
+    setContractAddress(address);
+  };
+  const handleKeyCreated = (address: string) => {
+    setIsKeyCreated(true);
+    setContractAddress(address);
+  };
   const handleCloseReviewDialog = () => {
-    setIsPreviewOpen(false);
-  }
+    if (isTokenPreviewOpen) {
+      setIsTokenPreviewOpen(false);
+    }
+    if (isKeyPreviewOpen) {
+      setIsKeyPreviewOpen(false);
+    }
+  };
   const handleCloseTokenCreatedDialog = () => {
-    setIsCreated(false)
-  }
+    setIsTokenCreated(false);
+  };
+
+  const handleCloseKeyCreatedDialog = () => {
+    setIsKeyCreated(false);
+  };
 
   return (
     <div className="p-2 w-full max-w-3xl mx-auto">
-      <Tabs defaultValue="regular" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        defaultValue="regular"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4">
         <TabsList className="grid w-full grid-cols-2 h-auto">
           <TabsTrigger
             value="regular"
-            className="flex flex-col items-center justify-center space-y-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
+            className="flex flex-col items-center justify-center space-y-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             <Coins className="w-8 h-8" />
             <span className="text-lg font-medium">New Token</span>
           </TabsTrigger>
           <TabsTrigger
             value="key"
-            className="flex flex-col items-center justify-center space-y-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
+            className="flex flex-col items-center justify-center space-y-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             <Key className="w-8 h-8" />
             <span className="text-lg font-medium">New Key</span>
           </TabsTrigger>
@@ -62,25 +81,25 @@ export const TokenFactory = () => {
           <HeroKeyForm onFormSubmit={handleKeyFormSubmit} />
         </TabsContent>
       </Tabs>
-      {tokenFormData && (
+      {tokenFormData && !isTokenCreated && (
         <TokenPreviewDialog
           formData={tokenFormData}
-          isOpen={isPreviewOpen}
+          isOpen={isTokenPreviewOpen}
           onClose={handleCloseReviewDialog}
           onTokenCreated={handleTokenCreated}
         />
       )}
-      {keyFormData && keyFormData.coinName && (
+      {keyFormData && keyFormData.keyName && !isKeyCreated && (
         <KeyPreviewDialog
           formData={keyFormData}
-          isOpen={isPreviewOpen}
+          isOpen={isKeyPreviewOpen}
           onClose={handleCloseReviewDialog}
-          onKeyCreated={handleTokenCreated}
+          onKeyCreated={handleKeyCreated}
         />
       )}
       {tokenFormData && (
         <TokenCreatedDialog
-          isOpen={isCreated}
+          isOpen={isTokenCreated}
           onClose={handleCloseTokenCreatedDialog}
           symbol={tokenFormData.symbol}
           coinName={tokenFormData.coinName}
@@ -90,14 +109,14 @@ export const TokenFactory = () => {
       )}
       {keyFormData && (
         <KeyCreatedDialog
-          isOpen={isCreated}
-          onClose={handleCloseTokenCreatedDialog}
+          isOpen={isKeyCreated}
+          onClose={handleCloseKeyCreatedDialog}
           symbol={keyFormData.symbol}
-          keyName={keyFormData.coinName}
+          keyName={keyFormData.keyName}
           keyAddress={contractAddress}
           image={keyFormData.image}
         />
       )}
     </div>
-  )
-}
+  );
+};
