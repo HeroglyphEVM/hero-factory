@@ -23,8 +23,6 @@ export const useGetRecentTransfers = (tokenAddress: Address) => {
     let toBlock = currentBlock;
 
     while (logs.length < 10 && attempts < maxAttempts) {
-      console.log('fromBlock:', fromBlock);
-
       logs =
         (await client?.getLogs({
           address: tokenAddress,
@@ -35,8 +33,8 @@ export const useGetRecentTransfers = (tokenAddress: Address) => {
           toBlock: toBlock,
         })) ?? [];
 
-      fromBlock = fromBlock - BigInt(blockRange);
       toBlock = fromBlock;
+      fromBlock = fromBlock - BigInt(blockRange);
       attempts++;
     }
 

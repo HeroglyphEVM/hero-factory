@@ -1,8 +1,8 @@
-import { fetchFromUrl, resolveUrl } from "@/services/fetchService";
-import { KeyData, KeyRedeemType } from "@/types/key-types";
-import { useQuery } from "@tanstack/react-query";
-import { Address, Log, parseAbiItem } from "viem";
-import { useAccount, usePublicClient } from "wagmi";
+import { fetchFromUrl, resolveUrl } from '@/services/fetchService';
+import { KeyData, KeyRedeemType } from '@/types/key-types';
+import { useQuery } from '@tanstack/react-query';
+import { Address, Log, parseAbiItem } from 'viem';
+import { useAccount, usePublicClient } from 'wagmi';
 
 const ZERO_BIGINT = BigInt(0);
 
@@ -15,24 +15,27 @@ export const useGetRecentKeyMints = (keyData: KeyData) => {
     if (!currentBlock) return [];
 
     let logs: Log[] = [];
-    let blockRange = 2000;
+
     const maxAttempts = 10;
     let attempts = 0;
 
-    while (logs.length < 6 && attempts < maxAttempts) {
-      const fromBlock = currentBlock - BigInt(blockRange);
+    const blockRange = 495;
+    let fromBlock = currentBlock - BigInt(blockRange);
+    let toBlock = currentBlock;
 
+    while (logs.length < 6 && attempts < maxAttempts) {
       logs =
         (await client?.getLogs({
           address: keyData.address as Address,
           event: parseAbiItem(
-            "event Redeemed(address indexed to, uint256 indexed tokenId, uint32 timestamp)"
+            'event Redeemed(address indexed to, uint256 indexed tokenId, uint32 timestamp)',
           ),
           fromBlock: fromBlock > ZERO_BIGINT ? fromBlock : ZERO_BIGINT,
-          toBlock: "latest",
+          toBlock: toBlock,
         })) ?? [];
 
-      blockRange *= 2;
+      toBlock = fromBlock;
+      fromBlock = fromBlock - BigInt(blockRange);
       attempts++;
     }
 
@@ -40,13 +43,13 @@ export const useGetRecentKeyMints = (keyData: KeyData) => {
       logs
         .sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber))
         .slice(0, 10)
-        .map((log) => parseRedeem(log, keyData))
+        .map(log => parseRedeem(log, keyData)),
     );
   };
 
   return useQuery({
     enabled: !!address,
-    queryKey: ["recent-mints", keyData.address],
+    queryKey: ['recent-mints', keyData.address],
     queryFn: fetchRecentRedeems,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -54,10 +57,7 @@ export const useGetRecentKeyMints = (keyData: KeyData) => {
   });
 };
 
-const parseRedeem = async (
-  log: any,
-  keyData: KeyData
-): Promise<KeyRedeemType> => {
+const parseRedeem = async (log: any, keyData: KeyData): Promise<KeyRedeemType> => {
   const { to, tokenId, timestamp } = log.args;
   let image, name;
 

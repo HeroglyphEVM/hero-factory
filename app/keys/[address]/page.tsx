@@ -1,25 +1,23 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { beautifyAddress } from "@/utils/web3";
-import { useParams } from "next/navigation";
-import { useGetKeyMetadata } from "@/hooks/keys/useGetKeyMetadata";
-import { Address } from "viem";
-import { KeyPageSkeleton } from "../_components/KeyPageSkeleton";
-import { InvalidKey } from "../_components/InvalidKey";
-import { KeyHeader } from "./_components/KeyHeader";
-import { useGetKeyDescriptor } from "@/hooks/keys/useGetKeyDescriptor";
-import { CopyButton } from "@/components/ui/copy-button";
-import { RecentMintsCard } from "./_components/RecentMintsCard";
-import { RecentKeyTransfersCard } from "./_components/RecentKeyTransfersCard";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { beautifyAddress } from '@/utils/web3';
+import { useParams } from 'next/navigation';
+import { useGetKeyMetadata } from '@/hooks/keys/useGetKeyMetadata';
+import { Address } from 'viem';
+import { KeyPageSkeleton } from '../_components/KeyPageSkeleton';
+import { InvalidKey } from '../_components/InvalidKey';
+import { KeyHeader } from './_components/KeyHeader';
+import { useGetKeyDescriptor } from '@/hooks/keys/useGetKeyDescriptor';
+import { CopyButton } from '@/components/ui/copy-button';
+import { RecentMintsCard } from './_components/RecentMintsCard';
+import { RecentKeyTransfersCard } from './_components/RecentKeyTransfersCard';
 
 export default function KeyPage() {
   const { address } = useParams() as { address: Address };
   const { data: keyData, isLoading, isError } = useGetKeyMetadata(address);
-  const { data: keyDescriptor } = useGetKeyDescriptor(
-    keyData?.metadata?.descriptorHash
-  );
+  const { data: keyDescriptor } = useGetKeyDescriptor(keyData?.metadata?.descriptorHash);
 
   if (isLoading && !isError) {
     return <KeyPageSkeleton />;
@@ -97,20 +95,12 @@ export default function KeyPage() {
                     <p className="text-sm font-medium">Rewards:</p>
                   </div>
                   <Progress
-                    value={
-                      (Number(keyData.totalSupply) /
-                        Number(keyData.maxSupply)) *
-                      100
-                    }
+                    value={(Number(keyData.totalSupply) / Number(keyData.maxSupply)) * 100}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-sm text-muted-foreground mt-1">
                     <span>
-                      {(
-                        (Number(keyData.totalSupply) /
-                          Number(keyData.maxSupply)) *
-                        100
-                      ).toFixed(2)}
+                      {((Number(keyData.totalSupply) / Number(keyData.maxSupply)) * 100).toFixed(2)}
                       %
                     </span>
                   </div>
