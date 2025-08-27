@@ -30,6 +30,7 @@ export const useContractWrite = ({
   const { chain, isConnected } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
+
   const { toast } = useToast();
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
@@ -59,7 +60,8 @@ export const useContractWrite = ({
 
     try {
       setIsMining(true);
-      const { blockConfirmations, onBlockConfirmation, ...mutateOptions } = options || {};
+      const { blockConfirmations, onBlockConfirmation, ...mutateOptions } =
+        options || {};
       const makeWriteWithParams = () =>
         wagmiContractWrite.writeContractAsync(
           {
@@ -74,7 +76,7 @@ export const useContractWrite = ({
                 WriteContractVariables<Abi, string, any[], Config, number>,
                 unknown
               >
-            | undefined,
+            | undefined
         );
       const writeTxResult = await writeTx(makeWriteWithParams, {
         blockConfirmations,
@@ -118,7 +120,7 @@ export const useContractWrite = ({
             WriteContractVariables<Abi, string, any[], Config, number>,
             unknown
           >
-        | undefined,
+        | undefined
     );
   };
 

@@ -2,6 +2,8 @@ import appConfig from '@/app.config';
 import { TARGET_NETWORK } from '@/services/web3/wagmiConfig';
 import * as chains from 'viem/chains';
 
+// ! The code below is for Envio if we wish to switch to it
+
 // Mapping of chainId to RPC chain name an format followed by Envio
 // export const RPC_CHAIN_NAMES: Record<number, string> = {
 //   [chains.mainnet.id]: "eth",
@@ -65,6 +67,7 @@ export const getRpcHttpUrl = (chainId: number) => {
 export function getBlockExplorerTxLink(txnHash: string) {
   // const targetChain = appConfig.targetNetwork;
   const blockExplorerTxURL = TARGET_NETWORK?.blockExplorers?.default?.url;
+
   if (!blockExplorerTxURL) {
     return '';
   }
